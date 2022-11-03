@@ -8,8 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.com.mjv.petshopAPI.repository.ProdutoRepository;
 import br.com.mjv.petshopAPI.entity.Produto;
+import br.com.mjv.petshopAPI.repository.ProdutoRepository;
 
 @Service
 public class ProdutoService {
@@ -35,15 +35,6 @@ public class ProdutoService {
 
 	public List<Produto> findProdutoByCategoriaCodigo(Long codigo) {
 		return produtoRepository.findByCategoriaCodigo(codigo);
-	}
-
-	public String cadastrarProduto(Produto produto) throws Exception {
-		if (produto.equals(null)) {
-			throw new Exception("Produto invalido");
-		} else {
-			produtoRepository.save(produto);
-		}
-		return "Produto cadastrado com sucesso!";
 	}
 
 	public void removeEstoqueProduto(long idProduto, int quantidade) throws Exception {
@@ -84,6 +75,15 @@ public class ProdutoService {
 
 		produtoBuscado.get().setQuantidade(produtoBuscado.get().getQuantidade() + quantidade);
 		produtoRepository.save(produtoBuscado.get());
+	}
+	
+	public String cadastrarProduto(Produto produto) throws Exception {
+		if (produto.equals(null)) {
+			throw new Exception("Produto invalida");
+		} else {
+			produtoRepository.save(produto);
+		}
+		return "Produto cadastrado com sucesso!";
 	}
 
 }

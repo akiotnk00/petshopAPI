@@ -32,12 +32,12 @@ public class SwaggerConfiguration {
     private ApiInfo metaInfo() {
 
         ApiInfo apiInfo = new ApiInfo(
-                "PetShop API REST",
+                "MJV PetShop API REST",
                 "API Rest para Ecommerce de PetShop",
                 "2.0",
                 "Terms of Service",
                 new Contact("Akio Tanaka","https://www.linkedin.com/in/akio-tanaka-392141160/","akiotnk00@gmail.com"),
-                "Apache License Version 2.0",
+                "Apache License Version 1.0",
                 "https://www.apache.org/licesen.html", new ArrayList<VendorExtension>()
         );
 

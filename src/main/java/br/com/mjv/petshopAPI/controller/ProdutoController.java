@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.mjv.petshopAPI.entity.Produto;
 import br.com.mjv.petshopAPI.services.ProdutoService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import br.com.mjv.petshopAPI.entity.Produto;
 
 @RestController
 @RequestMapping(value = "/produtos")
@@ -50,7 +50,7 @@ public class ProdutoController {
 		return produtoService.findProdutoByCategoriaCodigo(codigo);
 	}
 
-	@PostMapping
+	@PutMapping
 	public String cadastrarProduto(@RequestBody Produto produto) throws Exception {
 		return produtoService.cadastrarProduto(produto);
 	}
@@ -59,4 +59,5 @@ public class ProdutoController {
 	public String deletaProduto(@PathVariable long codigo) throws Exception {
 		return produtoService.deletarProduto(codigo);
 	}
+	
 }
