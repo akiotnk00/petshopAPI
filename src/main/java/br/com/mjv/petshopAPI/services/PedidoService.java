@@ -163,7 +163,6 @@ public class PedidoService {
 		endereco.setCep(pedidoBuscado.get().getCliente().getEndereco().getCep());
 		endereco.setLogradouro(pedidoBuscado.get().getCliente().getEndereco().getLogradouro());
 		endereco.setNumero(pedidoBuscado.get().getCliente().getEndereco().getNumero());
-		endereco.setPedido(pedidoBuscado.get());
 
 		pedidoBuscado.get().setEnderecoEntrega(endereco);
 		pedidoBuscado.get().setStatus(StatusPedido.PAGAMENTO);
@@ -188,7 +187,6 @@ public class PedidoService {
 		endereco.setCep(cep);
 		endereco.setLogradouro(logradouro);
 		endereco.setNumero(numero);
-		endereco.setPedido(pedidoBuscado.get());
 
 		pedidoBuscado.get().setEnderecoEntrega(endereco);
 		pedidoBuscado.get().setStatus(StatusPedido.PAGAMENTO);

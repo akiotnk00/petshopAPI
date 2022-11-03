@@ -30,9 +30,6 @@ public class EnderecoEntrega implements Serializable{
 	private Integer numero;	
 	private String cep;
 	
-	@OneToOne
-	@JsonManagedReference
-	private Pedido pedido;
 
 	public Long getCodigo() {
 		return codigo;
@@ -42,13 +39,6 @@ public class EnderecoEntrega implements Serializable{
 		this.codigo = codigo;
 	}
 
-	public Pedido getPedido() {
-		return pedido;
-	}
-
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
-	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
