@@ -1,7 +1,8 @@
 package br.com.mjv.petshopAPI.entity;
 
-public enum StatusVenda {
+public enum StatusPedido {
 	CARRINHO,
+	ENDERECO,
 	PAGAMENTO,
 	ENTREGA,
 	FINALIZADO,

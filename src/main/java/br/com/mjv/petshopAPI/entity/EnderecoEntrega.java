@@ -6,15 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "endereco")
-public class Endereco implements Serializable{
+@Table(name = "endereco_entrega")
+public class EnderecoEntrega implements Serializable{
 	/**
 	 * 
 	 */
@@ -23,19 +22,18 @@ public class Endereco implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
-
-	@OneToOne
-	@JoinColumn(name = "cliente_id", nullable = true)
-	@JsonManagedReference
-	private Cliente cliente;
 	
 	private String estado;
 	private String cidade;
 	private String bairro;
 	private String logradouro;
+	private Integer numero;	
 	private String cep;
-	private Integer numero;
 	
+	@OneToOne
+	@JsonManagedReference
+	private Pedido pedido;
+
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -44,12 +42,12 @@ public class Endereco implements Serializable{
 		this.codigo = codigo;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public Pedido getPedido() {
+		return pedido;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 
 	public static long getSerialversionuid() {
@@ -103,6 +101,7 @@ public class Endereco implements Serializable{
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
-
+	
+	
 	
 }

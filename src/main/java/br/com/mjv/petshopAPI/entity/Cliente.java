@@ -1,32 +1,44 @@
 package br.com.mjv.petshopAPI.entity;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "cliente")
-public class Cliente {
+public class Cliente implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
 	
 	private String nome;
-	private Integer cpf;
-	private Integer telefone;
+	private String cpf;
+	private String telefone;
 	private String email;
-	private Date datanascimento;
+	private LocalDate datanascimento;
 	
-	@OneToMany(mappedBy = "cliente")
-	private List<Endereco> enderecos;
+	@OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
+	@JsonBackReference
+	private Endereco endereco;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -40,16 +52,17 @@ public class Cliente {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Integer getCpf() {
+	
+	public String getCpf() {
 		return cpf;
 	}
-	public void setCpf(Integer cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	public Integer getTelefone() {
+	public String getTelefone() {
 		return telefone;
 	}
-	public void setTelefone(Integer telefone) {
+	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
 	public String getEmail() {
@@ -58,18 +71,23 @@ public class Cliente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Date getDatanascimento() {
+
+	public LocalDate getDatanascimento() {
 		return datanascimento;
 	}
-	public void setDatanascimento(Date datanascimento) {
+	public void setDatanascimento(LocalDate datanascimento) {
 		this.datanascimento = datanascimento;
 	}
-	public List<Endereco> getEnderecos() {
-		return enderecos;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
-	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
+	public Endereco getEndereco() {
+		return endereco;
 	}
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
 	
 	
 }

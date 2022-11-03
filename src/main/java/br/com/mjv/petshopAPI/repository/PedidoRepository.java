@@ -5,10 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import br.com.mjv.petshopAPI.entity.Cliente;
+import br.com.mjv.petshopAPI.entity.Pedido;
 
-public interface ClienteRepository  extends JpaRepository<Cliente, Long>{
+public interface PedidoRepository   extends JpaRepository<Pedido, Long>{
 
-	@Query("SELECT c FROM Cliente c")
-	Page<Cliente> findClientes(Pageable pageable);
+	@Query("SELECT p FROM Pedido p")
+	Page<Pedido> findPedidos(Pageable pageable);
+	
+	
 }
