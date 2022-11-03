@@ -1,5 +1,6 @@
 package br.com.mjv.petshopAPI.services;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class PedidoService {
 	}
 
 	// Adiciona um produto em um pedido.
-	public String adicionarProduto(long idProduto, long idPedido, int quantidade) throws Exception {
+	public String adicionarProduto(long idPedido, long idProduto, int quantidade) throws Exception {
 
 		Optional<Produto> produtoBuscado = produtoRepository.findById(idProduto);
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(idPedido);
@@ -161,18 +162,40 @@ public class PedidoService {
 			throw new Exception("Não foi possivel localizar o pedido.");
 		}
 
-		if(!pedidoBuscado.get().getStatus().equals(StatusPedido.ENTREGA)) {
-		pedidoBuscado.get().setStatus(StatusPedido.ENTREGA);
-		pedidoBuscado.get().setData(LocalDate.now());
-		}
-		else
-		{
+		if (!pedidoBuscado.get().getStatus().equals(StatusPedido.ENTREGA)) {
+			pedidoBuscado.get().setStatus(StatusPedido.ENTREGA);
+			pedidoBuscado.get().setData(LocalDate.now());
+		} else {
 			throw new Exception("O pagamento do pedido já foi confirmado!");
 		}
-		
+
 		pedidoRepository.save(pedidoBuscado.get());
-		
+
 		return "Pagamento confirmado!";
 	}
 
+	
+	// Resumo com retorno de mensagem, codigo da compra e valor total.
+	public String resumoPedido(Long codigo) throws Exception {
+		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
+		if (!pedidoBuscado.isPresent()) {
+			throw new Exception("Não foi possivel localizar o pedido.");
+		}
+		BigDecimal total = BigDecimal.ZERO;
+		
+		for (ItemPedido itemPedido: pedidoBuscado.get().getItemPedido()){
+			Integer i=0;
+			while (i < itemPedido.getQuantidade()) {
+			total = total.add(itemPedido.getValor());
+			i++;
+			}
+		}
+		
+		return "O valor total é de R$"+total.doubleValue()/100+"." ;
+	}
+	
+	 public String confirmaSMSPedido(Long codigo) throws Exception {
+		 
+		 return "SUA COMPRA NA MJV PETSHOP FOI CONFIRMADA!, "+resumoPedido(codigo);
+	 }
 }

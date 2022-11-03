@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,11 +27,11 @@ public class PedidoController {
 	}
 
 	// Adiciona um produto ao carrinho.
-	@PatchMapping("/codigo/{codigo}/produto/{codigoProduto}/quantidade/{quantidade}")
-	public String adicionaProdutoCarrinho(@PathVariable Long codigo, @PathVariable Long codigoProduto, @PathVariable int quantidade)
+	@PostMapping("/codigo/{codigoPedido}/produto/{codigoProduto}/quantidade/{quantidade}")
+	public String adicionaProdutoCarrinho(@PathVariable Long codigoPedido, @PathVariable Long codigoProduto, @PathVariable int quantidade)
 			throws Exception {
 
-		return pedidoService.adicionarProduto(codigo, codigoProduto, quantidade);
+		return pedidoService.adicionarProduto(codigoPedido, codigoProduto, quantidade);
 	}
 	
 	// Finaliza o carrinho e confirma o pedido.
@@ -61,6 +62,11 @@ public class PedidoController {
 	public String confirmaPagamento(@PathVariable Long codigo) throws Exception {
 		return pedidoService.confirmaPagamento(codigo);
 	}
-		
+	
+	@GetMapping("/{codigo}/resumo")
+	public String resumoPedido(@PathVariable Long codigo) throws Exception {
+		return pedidoService.resumoPedido(codigo);
+	}
+	
 	
 }

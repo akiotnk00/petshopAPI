@@ -40,6 +40,11 @@ public class ItemPedido implements Serializable{
 
 	
 	
+	
+	public ItemPedido() {
+		super();
+	}
+
 	public ItemPedido(Pedido pedido,Produto produto, Integer quantidade) {
 		super();
 		this.produto = produto;

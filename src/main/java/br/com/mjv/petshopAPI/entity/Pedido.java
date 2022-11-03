@@ -52,9 +52,17 @@ public class Pedido implements Serializable{
 	
 	// Constructors
 	
-	public Pedido() {
+	
+	
+	public Pedido(Cliente cliente) {
 		super();
 		status = StatusPedido.CARRINHO;
+		this.cliente = cliente;
+	}
+
+
+	public Pedido() {
+		super();
 	}
 
 
