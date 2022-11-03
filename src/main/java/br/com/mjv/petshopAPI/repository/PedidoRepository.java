@@ -11,6 +11,11 @@ public interface PedidoRepository   extends JpaRepository<Pedido, Long>{
 
 	@Query("SELECT p FROM Pedido p")
 	Page<Pedido> findPedidos(Pageable pageable);
+
+	@Query(
+			  value = "SELECT * FROM Pedido p WHERE p.status = 'ENTREGA'", 
+			  nativeQuery = true)
+	Page<Pedido> findPedidosEntrega(Pageable pageable);
 	
 	
 }

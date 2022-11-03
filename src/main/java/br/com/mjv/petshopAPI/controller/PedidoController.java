@@ -1,8 +1,11 @@
 package br.com.mjv.petshopAPI.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.com.mjv.petshopAPI.entity.ItemPedido;
 import br.com.mjv.petshopAPI.entity.Pedido;
 import br.com.mjv.petshopAPI.services.PedidoService;
 
@@ -25,6 +30,11 @@ public class PedidoController {
 	public Page<Pedido> findPedidos(Pageable pageable) {
 		return pedidoService.findPedidos(pageable);
 	}
+	
+	@GetMapping("{codigo}/entrega")
+	public Page<Pedido> findPedidosEntrega(Pageable pageable) {
+		return pedidoService.findPedidosEntrega(pageable);
+	}
 
 	// Adiciona um produto ao carrinho.
 	@PostMapping("/codigo/{codigoPedido}/produto/{codigoProduto}/quantidade/{quantidade}")
@@ -32,6 +42,14 @@ public class PedidoController {
 			throws Exception {
 
 		return pedidoService.adicionarProduto(codigoPedido, codigoProduto, quantidade);
+	}
+	
+	// Remove um produto do carrinho
+	@DeleteMapping("{codigoPedido}/item/{codigoItemPedido}")
+	public String removeProdutoCarrinho(@PathVariable Long codigoPedido, @PathVariable Long codigoItemPedido)
+			throws Exception {
+
+		return pedidoService.removerProduto(codigoPedido, codigoItemPedido);
 	}
 	
 	// Finaliza o carrinho e confirma o pedido.
@@ -68,5 +86,13 @@ public class PedidoController {
 		return pedidoService.resumoPedido(codigo);
 	}
 	
+	@GetMapping("/{codigo}/itens")
+	public List<ItemPedido> itensPedido(@PathVariable Long codigo) throws Exception {
+		return pedidoService.itensPedido(codigo);
+	}
 	
+	@DeleteMapping("/{codigo}")
+	public String deletaPedido(@PathVariable long codigo) throws Exception {
+		return pedidoService.deletarPedido(codigo);
+	}
 }

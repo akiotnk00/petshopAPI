@@ -30,7 +30,7 @@ public class ClienteService {
 		
 		// Toda vez que um cliente for cadastrado um pedido é criado.
 		// E por padrão ele recebe o STATUS de CARRRINHO.
-		Pedido pedido = new Pedido();	
+		Pedido pedido = new Pedido(cliente);	
 		
 		// Salva o novo cliente.
 		clienteRepository.save(cliente);

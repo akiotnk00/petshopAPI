@@ -21,33 +21,31 @@ public class ProdutoService {
 		return produtoRepository.findProdutos(pageable);
 	}
 
-	public List<Produto> findProdutoByNome(String nome){
+	public List<Produto> findProdutoByNome(String nome) {
 		return produtoRepository.findByNome(nome);
 	}
-	
-	public List<Produto> findProdutoByCodigo(Long codigo){
+
+	public List<Produto> findProdutoByCodigo(Long codigo) {
 		return produtoRepository.findByCodigo(codigo);
 	}
-	
-	public List<Produto> findProdutoByCategoriaNome(String nome){
+
+	public List<Produto> findProdutoByCategoriaNome(String nome) {
 		return produtoRepository.findByCategoriaNome(nome);
 	}
-	
-	public List<Produto> findProdutoByCategoriaCodigo(Long codigo){
+
+	public List<Produto> findProdutoByCategoriaCodigo(Long codigo) {
 		return produtoRepository.findByCategoriaCodigo(codigo);
 	}
-	
+
 	public String cadastrarProduto(Produto produto) throws Exception {
-		if(produto.equals(null)) {
+		if (produto.equals(null)) {
 			throw new Exception("Produto invalido");
-		}
-		else
-		{
+		} else {
 			produtoRepository.save(produto);
 		}
 		return "Produto cadastrado com sucesso!";
 	}
-	
+
 	public void removeEstoqueProduto(long idProduto, int quantidade) throws Exception {
 		Optional<Produto> produtoBuscado = produtoRepository.findById(idProduto);
 
@@ -63,6 +61,18 @@ public class ProdutoService {
 			throw new Exception("Quantidade não disponivel.");
 		}
 
+	}
+
+	public String deletarProduto(long codigo) throws Exception {
+
+		Optional<Produto> produtoBuscado = produtoRepository.findById(codigo);
+
+		if (!produtoBuscado.isPresent()) {
+			throw new Exception("Não foi possivel localizar o produto.");
+		}
+		produtoRepository.delete(produtoBuscado.get());
+
+		return "Produto deletada com sucesso!";
 	}
 
 	public void adicionaEstoqueProduto(long idProduto, int quantidade) throws Exception {

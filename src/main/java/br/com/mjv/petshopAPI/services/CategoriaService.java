@@ -34,6 +34,18 @@ public class CategoriaService {
 		return categoriaRepository.findByCodigo(codigo);
 	}
 
+	public String deletarCategoria(long codigo) throws Exception {
+		
+		Optional<Categoria> categoriaBuscada = categoriaRepository.findById(codigo);
+		
+		if(!categoriaBuscada.isPresent()) {
+			throw new Exception("Não foi possivel localizar a categoria.");
+		}
+		categoriaRepository.delete(categoriaBuscada.get());
+		
+		return "Categoria deletada com sucesso!";
+	}
+	
 	public String cadastrarCategoria(Categoria categoria) throws Exception {
 		if (categoria.equals(null)) {
 			throw new Exception("Categoria invalida");

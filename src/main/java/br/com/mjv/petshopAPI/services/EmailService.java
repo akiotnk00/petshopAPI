@@ -1,0 +1,14 @@
+package br.com.mjv.petshopAPI.services;
+
+import br.com.mjv.petshopAPI.entity.EmailDetails;
+
+public interface EmailService {
+	 
+    // Method
+    // To send a simple email
+    String sendSimpleMail(EmailDetails details);
+ 
+    // Method
+    // To send an email with attachment
+    String sendMailWithAttachment(EmailDetails details);
+}

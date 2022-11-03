@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "item_pedido")
@@ -32,7 +33,7 @@ public class ItemPedido implements Serializable{
 
 	@ManyToOne
 	@JoinColumn(name = "pedido_id", nullable = false)
-	@JsonManagedReference
+	@JsonBackReference
 	private Pedido pedido;
 	
 	private Integer quantidade;

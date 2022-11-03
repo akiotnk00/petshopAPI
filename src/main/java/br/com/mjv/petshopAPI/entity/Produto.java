@@ -2,15 +2,19 @@ package br.com.mjv.petshopAPI.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -34,6 +38,10 @@ public class Produto implements Serializable{
 	@JoinColumn(name = "categoria_id", nullable = true)
 	@JsonManagedReference
 	private Categoria categoria;
+	
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+	@JsonBackReference
+	private List<ItemPedido> itens;
 
 	public Long getCodigo() {
 		return codigo;
@@ -90,5 +98,19 @@ public class Produto implements Serializable{
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
+
+	public List<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<ItemPedido> itens) {
+		this.itens = itens;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 
 }

@@ -2,6 +2,7 @@ package br.com.mjv.petshopAPI.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.mjv.petshopAPI.entity.EmailDetails;
 import br.com.mjv.petshopAPI.entity.EnderecoEntrega;
 import br.com.mjv.petshopAPI.entity.ItemPedido;
 import br.com.mjv.petshopAPI.entity.Pedido;
@@ -32,9 +34,24 @@ public class PedidoService {
 
 	@Autowired
 	private ProdutoService produtoService;
+	
+	@Autowired
+	private EmailService emailService;
 
 	public Page<Pedido> findPedidos(Pageable pageable) {
 		return pedidoRepository.findPedidos(pageable);
+	}
+
+	public String deletarPedido(long codigo) throws Exception {
+
+		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
+
+		if (!pedidoBuscado.isPresent()) {
+			throw new Exception("Não foi possivel localizar o pedido.");
+		}
+		pedidoRepository.delete(pedidoBuscado.get());
+
+		return "Pedido deletada com sucesso!";
 	}
 
 	// Adiciona um produto em um pedido.
@@ -79,10 +96,36 @@ public class PedidoService {
 		} else {
 			throw new Exception("Carrinho já finalizado.");
 		}
+		
+		EmailDetails details = new EmailDetails();
+		details.setRecipient(pedidoBuscado.get().getCliente().getEmail());
+		details.setSubject("SUA COMPRA NA MJV PETSHOP FOI CONFIRMADA!");
+		details.setMsgBody("Olá "+pedidoBuscado.get().getCliente().getNome()+", sua compra foi confirmada com a gente!"+System.lineSeparator()+emailPedido(pedidoBuscado.get()));
+		
+		emailService.sendSimpleMail(details);
 
+		Pedido pedidonovo = new Pedido(pedidoBuscado.get().getCliente());
+		
+		pedidoRepository.save(pedidonovo);
+		
 		return "Carrinho finalizado!";
 	}
 
+	// Monta o cabeçalho do email com os pedidos
+	public StringBuilder emailPedido(Pedido pedido) {
+		
+		StringBuilder msg = new StringBuilder(); 
+		
+		for(ItemPedido item : pedido.getItemPedido()) {
+			msg.append(System.lineSeparator()+"- Produto: "+item.getProduto().getNome()+" | Quantidade: "+item.getQuantidade()+" | Valor Unitário: R$"+item.getValor().doubleValue()/100);
+		}
+		
+		msg.append(System.lineSeparator()+System.lineSeparator()+"Total da compra: R$"+valorTotalPedido(pedido));
+		
+		
+		return msg;
+	}
+	
 	// Caso o cliente queira voltar e continuar a adicionar itens ao pedido.
 	public String voltaCarrinhoPedido(long idPedido) throws Exception {
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(idPedido);
@@ -171,10 +214,18 @@ public class PedidoService {
 
 		pedidoRepository.save(pedidoBuscado.get());
 
+		EmailDetails details = new EmailDetails();
+		
+		details.setSubject("O PAGAMENTO DA SUA COMPRA FOI CONFIRMADO!");
+		details.setMsgBody("O pagamento da sua compra foi confirmado, em breve ele será enviado.");
+		details.setRecipient(pedidoBuscado.get().getCliente().getEmail());
+		
+		emailService.sendSimpleMail(details);
+		
 		return "Pagamento confirmado!";
 	}
-
 	
+
 	// Resumo com retorno de mensagem, codigo da compra e valor total.
 	public String resumoPedido(Long codigo) throws Exception {
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
@@ -182,20 +233,75 @@ public class PedidoService {
 			throw new Exception("Não foi possivel localizar o pedido.");
 		}
 		BigDecimal total = BigDecimal.ZERO;
-		
-		for (ItemPedido itemPedido: pedidoBuscado.get().getItemPedido()){
-			Integer i=0;
+
+		for (ItemPedido itemPedido : pedidoBuscado.get().getItemPedido()) {
+			Integer i = 0;
 			while (i < itemPedido.getQuantidade()) {
-			total = total.add(itemPedido.getValor());
-			i++;
+				total = total.add(itemPedido.getValor());
+				i++;
 			}
 		}
-		
-		return "O valor total é de R$"+total.doubleValue()/100+"." ;
+
+		return "O valor total é de R$" + total.doubleValue() / 100 + ".";
+	}
+
+	
+	// Calcula o valor total do pedido.
+	public double valorTotalPedido(Pedido pedido) {
+		BigDecimal total = BigDecimal.ZERO;
+
+		for (ItemPedido itemPedido : pedido.getItemPedido()) {
+			Integer i = 0;
+			while (i < itemPedido.getQuantidade()) {
+				total = total.add(itemPedido.getValor());
+				i++;
+			}
+		}
+
+		return total.doubleValue()/100;
 	}
 	
-	 public String confirmaSMSPedido(Long codigo) throws Exception {
-		 
-		 return "SUA COMPRA NA MJV PETSHOP FOI CONFIRMADA!, "+resumoPedido(codigo);
-	 }
+	public String confirmaSMSPedido(Long codigo) throws Exception {
+
+		return "SUA COMPRA NA MJV PETSHOP FOI CONFIRMADA!, " + resumoPedido(codigo);
+	}
+
+	public Page<Pedido> findPedidosEntrega(Pageable pageable) {
+		return pedidoRepository.findPedidosEntrega(pageable);
+	}
+
+	public String removerProduto(Long codigoPedido, Long codigoItemPedido) throws Exception {
+		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigoPedido);
+		Optional<ItemPedido> itemPedidoBuscado = itemPedidoRepository.findById(codigoItemPedido);
+
+		if (!itemPedidoBuscado.isPresent()) {
+			throw new Exception("Não foi possivel localizar o item no pedido.");
+		}
+		if (!pedidoBuscado.isPresent()) {
+			throw new Exception("Não foi possivel localizar o pedido.");
+		}
+
+		if (pedidoBuscado.get().getStatus() != StatusPedido.CARRINHO) {
+			return "Carrinho fechado, abra novamente para remover os itens";
+		}
+
+		produtoService.adicionaEstoqueProduto(itemPedidoBuscado.get().getProduto().getCodigo(),
+				itemPedidoBuscado.get().getQuantidade());
+
+		itemPedidoRepository.delete(itemPedidoBuscado.get());
+
+		return "Produto removido do carrinho!";
+
+	}
+
+	
+	// Retorna todos os itens do pedido.
+	public List<ItemPedido> itensPedido(Long codigo) throws Exception {
+		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
+		if (!pedidoBuscado.isPresent()) {
+			throw new Exception("Não foi possivel localizar o pedido.");
+		}
+
+		return pedidoBuscado.get().getItemPedido();
+	}
 }
