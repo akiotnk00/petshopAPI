@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,27 +25,28 @@ public class PedidoController {
 	@Autowired
 	private PedidoService pedidoService;
 
+	// Busca todos os pedidos.
 	@GetMapping
-	public Page<Pedido> findPedidos(Pageable pageable) {
+	public Page<Pedido> buscarPedidos(Pageable pageable) {
 		return pedidoService.findPedidos(pageable);
 	}
-	
-	@GetMapping("{codigo}/entrega")
-	public Page<Pedido> findPedidosEntrega(Pageable pageable) {
-		return pedidoService.findPedidosEntrega(pageable);
+
+	// Deleta um pedido por ID.
+	@DeleteMapping("/{codigo}")
+	public String deletarPedido(@PathVariable long codigo) throws Exception {
+		return pedidoService.deletarPedido(codigo);
 	}
-
+	
 	// Adiciona um produto ao carrinho.
-	@PostMapping("/codigo/{codigoPedido}/produto/{codigoProduto}/quantidade/{quantidade}")
-	public String adicionaProdutoCarrinho(@PathVariable Long codigoPedido, @PathVariable Long codigoProduto, @PathVariable int quantidade)
+	@PostMapping("/{codigoPedido}/produto/{codigoProduto}/quantidade/{quantidade}")
+	public String adicionarProdutoCarrinho(@PathVariable Long codigoPedido, @PathVariable Long codigoProduto, @PathVariable int quantidade)
 			throws Exception {
-
 		return pedidoService.adicionarProduto(codigoPedido, codigoProduto, quantidade);
 	}
 	
 	// Remove um produto do carrinho
 	@DeleteMapping("{codigoPedido}/item/{codigoItemPedido}")
-	public String removeProdutoCarrinho(@PathVariable Long codigoPedido, @PathVariable Long codigoItemPedido)
+	public String removerProdutoCarrinho(@PathVariable Long codigoPedido, @PathVariable Long codigoItemPedido)
 			throws Exception {
 
 		return pedidoService.removerProduto(codigoPedido, codigoItemPedido);
@@ -54,7 +54,7 @@ public class PedidoController {
 	
 	// Finaliza o carrinho e confirma o pedido.
 	@PatchMapping("/codigo/{codigo}/confirmar")
-	public String confirmaPedido(@PathVariable Long codigo) throws Exception {
+	public String confirmarPedido(@PathVariable Long codigo) throws Exception {
 		return pedidoService.confirmaPedido(codigo);
 	}
 	
@@ -65,34 +65,39 @@ public class PedidoController {
 	}
 
 	// Confirma o mesmo endereco do cliente.
-	@PatchMapping("/codigo/{codigo}/endereco")
+	@PatchMapping("/{codigo}/endereco")
 	public  String enderecoClientePedido(@PathVariable Long codigo) throws Exception{
 		return pedidoService.enderecoClientePedido(codigo);
 	}
 	
-	@PutMapping("/{codigo}/novoendereco")
+	// Caso o cliente queira usar outro endereço para entrega.
+	@PostMapping("/{codigo}/novoendereco")
 	public String cadastrarEnderecoNovo(@PathVariable Long codigo ,@RequestParam String estado,@RequestParam String cidade,@RequestParam String cep,@RequestParam String bairro,@RequestParam String logradouro,@RequestParam Integer numero) throws Exception {
 		return pedidoService.cadastrarEnderecoNovo(codigo,estado,cidade,bairro,cep,logradouro,numero);
 		
 	}
 	
+	// Confirma o pagamento de um pedido pelo ID.
 	@PatchMapping("/{codigo}/pagamento")
-	public String confirmaPagamento(@PathVariable Long codigo) throws Exception {
+	public String confirmarPagamento(@PathVariable Long codigo) throws Exception {
 		return pedidoService.confirmaPagamento(codigo);
 	}
 	
+	// Retorna um resumo do pedido por ID.
 	@GetMapping("/{codigo}/resumo")
 	public String resumoPedido(@PathVariable Long codigo) throws Exception {
 		return pedidoService.resumoPedido(codigo);
 	}
 	
+	// Retorna todos os itens do pedido por ID.
 	@GetMapping("/{codigo}/itens")
 	public List<ItemPedido> itensPedido(@PathVariable Long codigo) throws Exception {
 		return pedidoService.itensPedido(codigo);
 	}
 	
-	@DeleteMapping("/{codigo}")
-	public String deletaPedido(@PathVariable long codigo) throws Exception {
-		return pedidoService.deletarPedido(codigo);
+	// Retorna todos os pedidos com status ENTREGA.
+	@GetMapping("{codigo}/entrega")
+	public Page<Pedido> buscarPedidosEntrega(Pageable pageable) {
+		return pedidoService.findPedidosEntrega(pageable);
 	}
 }

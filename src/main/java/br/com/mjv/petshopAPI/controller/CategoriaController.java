@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,40 +24,40 @@ public class CategoriaController {
 	@Autowired
 	private CategoriaService categoriaService;
 	
+	
+	// Busca todas as categorias.
 	@GetMapping
-	public Page<Categoria> findCategorias(Pageable pageable) {
+	public Page<Categoria> buscarCategorias(Pageable pageable) {
 		return categoriaService.findCategorias(pageable);
 	}
-	
-	// Buscar categoria por nome.
-	@GetMapping("/nome/{nome}")
-	public List<Categoria> 
-	findAllByNomeProdutos(@PathVariable String nome) {
 
-		return categoriaService.findCategoriaByNome(nome);
+	// Cadastra uma nova categoria.
+	@PostMapping
+	public String cadastrarCategoria(@RequestBody Categoria categoria) throws Exception {
+		return categoriaService.cadastrarCategoria(categoria);
 	}
-
+	
+	// Deleta uma categoria pelo ID.
+	@DeleteMapping("/{codigo}")
+	public String deletarCategoria(@PathVariable long codigo) throws Exception {
+		return categoriaService.deletarCategoria(codigo);
+	}
+	
+	
 	// Buscar categoria por codigo.
-	@GetMapping("/codigo/{codigo}")
-	public List<Categoria> findAllByCodigoCategorias(@PathVariable Long codigo) {
+	@GetMapping("/{codigo}")
+	public List<Categoria> buscarCategoriasPorCodigo(@PathVariable Long codigo) {
 
 		return categoriaService.findCategoriaByCodigo(codigo);
 	}
 	
 	// Adiciona um produto a categoria.
-	@PatchMapping("/codigo/{codigo}/produto/{codigoProduto}")
-	public String adicionaProdutoCategoria(@PathVariable Long codigo,@PathVariable Long codigoProduto) throws Exception {
+	@PatchMapping("/{codigo}/produto/{codigoProduto}")
+	public String adicionarProdutoCategoria(@PathVariable Long codigo,@PathVariable Long codigoProduto) throws Exception {
 
 		return categoriaService.adicionaProdutoCategoria(codigo,codigoProduto);
 	}
 	
-	@PutMapping
-	public String cadastrarCategoria(@RequestBody Categoria categoria) throws Exception {
-		return categoriaService.cadastrarCategoria(categoria);
-	}
 	
-	@DeleteMapping("/{codigo}")
-	public String deletaCategoria(@PathVariable long codigo) throws Exception {
-		return categoriaService.deletarCategoria(codigo);
-	}
+
 }
