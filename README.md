@@ -1,2 +1,2 @@
 # petshopAPI
- API Projeto Petshop MJV
+ Projeto:  API para Ecommerce do seguimento de  PetShop
