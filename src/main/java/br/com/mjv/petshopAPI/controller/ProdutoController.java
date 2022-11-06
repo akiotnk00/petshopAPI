@@ -26,7 +26,7 @@ public class ProdutoController {
 	
 	// Busca todas os produtos.
 	@GetMapping
-	public Page<Produto> findProdutos(Pageable pageable) {
+	public Page<Produto> buscarProdutos(Pageable pageable) {
 		return produtoService.findProdutos(pageable);
 	}
 
@@ -38,13 +38,13 @@ public class ProdutoController {
 	
 	// Deleta um produto por ID.
 	@DeleteMapping("/{codigo}")
-	public String deletaProduto(@PathVariable long codigo) throws Exception {
+	public String deletarProduto(@PathVariable long codigo) throws Exception {
 		return produtoService.deletarProduto(codigo);
 	}
 
 	// Busca um produto por ID.
 	@GetMapping("/{codigo}")
-	public List<Produto> findAllByCodigoProdutos(@PathVariable Long codigo) {
+	public List<Produto> buscarProdutosPorCodigo(@PathVariable Long codigo) {
 
 		return produtoService.findProdutoByCodigo(codigo);
 	}

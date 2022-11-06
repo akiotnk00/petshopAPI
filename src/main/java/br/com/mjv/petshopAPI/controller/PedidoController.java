@@ -53,13 +53,13 @@ public class PedidoController {
 	}
 	
 	// Finaliza o carrinho e confirma o pedido.
-	@PatchMapping("/codigo/{codigo}/confirmar")
+	@PatchMapping("/{codigo}/confirmar")
 	public String confirmarPedido(@PathVariable Long codigo) throws Exception {
 		return pedidoService.confirmaPedido(codigo);
 	}
 	
 	// Volta o pedido para o Status "Carrinho".
-	@PatchMapping("/codigo/{codigo}/voltar")
+	@PatchMapping("/{codigo}/voltar")
 	public String voltarPedido(@PathVariable Long codigo) throws Exception {
 		return pedidoService.voltaCarrinhoPedido(codigo);
 	}

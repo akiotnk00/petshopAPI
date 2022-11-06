@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +41,7 @@ public class ClienteController {
 	}
 	
 	// Cadastra um endereço novo.
-	@PutMapping("/{codigo}/endereco")
+	@PostMapping("/{codigo}/endereco")
 	public String cadastrarEndereco(@PathVariable Long codigo ,@RequestParam String estado,@RequestParam String cidade,@RequestParam String cep,@RequestParam String bairro,@RequestParam String logradouro,@RequestParam Integer numero) throws Exception {
 		return clienteService.cadastrarEndereco(codigo,estado,cidade,bairro,cep,logradouro,numero);
 		
