@@ -1,5 +1,6 @@
 package br.com.mjv.petshopAPI.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.mjv.petshopAPI.dto.ProdutoDto;
 import br.com.mjv.petshopAPI.entity.Produto;
 import br.com.mjv.petshopAPI.repository.ProdutoRepository;
 
@@ -18,6 +20,7 @@ public class ProdutoService {
 	private ProdutoRepository produtoRepository;
 
 	public Page<Produto> findProdutos(Pageable pageable) {
+	
 		return produtoRepository.findProdutos(pageable);
 	}
 
@@ -25,8 +28,12 @@ public class ProdutoService {
 		return produtoRepository.findByNome(nome);
 	}
 
-	public List<Produto> findProdutoByCodigo(Long codigo) {
-		return produtoRepository.findByCodigo(codigo);
+	public List<ProdutoDto> findProdutoByCodigo(Long codigo) {
+		List<Produto> produtos = produtoRepository.findByCodigo(codigo);
+		List<ProdutoDto> dtos = new ArrayList<ProdutoDto>();
+		produtos.forEach(p -> dtos.add(new ProdutoDto(p)));
+		
+		return dtos;
 	}
 
 	public List<Produto> findProdutoByCategoriaNome(String nome) {

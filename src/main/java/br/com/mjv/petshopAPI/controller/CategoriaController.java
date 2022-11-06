@@ -20,11 +20,10 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @RestController
 @RequestMapping(value = "/categorias")
 public class CategoriaController {
-	
+
 	@Autowired
 	private CategoriaService categoriaService;
-	
-	
+
 	// Busca todas as categorias.
 	@GetMapping
 	public Page<Categoria> buscarCategorias(Pageable pageable) {
@@ -36,28 +35,26 @@ public class CategoriaController {
 	public String cadastrarCategoria(@RequestBody Categoria categoria) throws Exception {
 		return categoriaService.cadastrarCategoria(categoria);
 	}
-	
+
 	// Deleta uma categoria pelo ID.
 	@DeleteMapping("/{codigo}")
 	public String deletarCategoria(@PathVariable long codigo) throws Exception {
 		return categoriaService.deletarCategoria(codigo);
 	}
-	
-	
+
 	// Buscar categoria por codigo.
 	@GetMapping("/{codigo}")
 	public List<Categoria> buscarCategoriasPorCodigo(@PathVariable Long codigo) {
 
 		return categoriaService.findCategoriaByCodigo(codigo);
 	}
-	
+
 	// Adiciona um produto a categoria.
 	@PatchMapping("/{codigo}/produto/{codigoProduto}")
-	public String adicionarProdutoCategoria(@PathVariable Long codigo,@PathVariable Long codigoProduto) throws Exception {
+	public String adicionarProdutoCategoria(@PathVariable Long codigo, @PathVariable Long codigoProduto)
+			throws Exception {
 
-		return categoriaService.adicionaProdutoCategoria(codigo,codigoProduto);
+		return categoriaService.adicionaProdutoCategoria(codigo, codigoProduto);
 	}
-	
-	
 
 }

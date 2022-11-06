@@ -34,7 +34,7 @@ public class PedidoService {
 
 	@Autowired
 	private ProdutoService produtoService;
-	
+
 	@Autowired
 	private EmailService emailService;
 
@@ -42,13 +42,13 @@ public class PedidoService {
 		return pedidoRepository.findPedidos(pageable);
 	}
 
+	// Deleta um pedido recebendo o ID como parametro.
 	public String deletarPedido(long codigo) throws Exception {
 
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
 
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		ValidarPedido.executa(pedidoBuscado);
+		
 		pedidoRepository.delete(pedidoBuscado.get());
 
 		return "Pedido deletada com sucesso!";
@@ -60,12 +60,8 @@ public class PedidoService {
 		Optional<Produto> produtoBuscado = produtoRepository.findById(idProduto);
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(idPedido);
 
-		if (!produtoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o produto.");
-		}
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		ValidarProduto.executa(produtoBuscado);	
+		ValidarPedido.executa(pedidoBuscado);
 
 		if (pedidoBuscado.get().getStatus() != StatusPedido.CARRINHO) {
 			return "Carrinho fechado, abra novamente para adicionar mais itens";
@@ -90,49 +86,52 @@ public class PedidoService {
 
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(idPedido);
 
+		ValidarPedido.executa(pedidoBuscado);
+		
 		if (pedidoBuscado.get().getStatus() == StatusPedido.CARRINHO) {
 			pedidoBuscado.get().setStatus(StatusPedido.ENDERECO);
 			pedidoRepository.save(pedidoBuscado.get());
 		} else {
 			throw new Exception("Carrinho já finalizado.");
 		}
-		
+
 		EmailDetails details = new EmailDetails();
 		details.setRecipient(pedidoBuscado.get().getCliente().getEmail());
 		details.setSubject("SUA COMPRA NA MJV PETSHOP FOI CONFIRMADA!");
-		details.setMsgBody("Olá "+pedidoBuscado.get().getCliente().getNome()+", sua compra foi confirmada com a gente!"+System.lineSeparator()+emailPedido(pedidoBuscado.get()));
-		
+		details.setMsgBody(
+				"Olá " + pedidoBuscado.get().getCliente().getNome() + ", sua compra foi confirmada com a gente!"
+						+ System.lineSeparator() + emailPedido(pedidoBuscado.get()));
+
 		emailService.sendSimpleMail(details);
 
 		Pedido pedidonovo = new Pedido(pedidoBuscado.get().getCliente());
-		
+
 		pedidoRepository.save(pedidonovo);
-		
+
 		return "Carrinho finalizado!";
 	}
 
 	// Monta o cabeçalho do email com os pedidos
 	public StringBuilder emailPedido(Pedido pedido) {
-		
-		StringBuilder msg = new StringBuilder(); 
-		
-		for(ItemPedido item : pedido.getItemPedido()) {
-			msg.append(System.lineSeparator()+"- Produto: "+item.getProduto().getNome()+" | Quantidade: "+item.getQuantidade()+" | Valor Unitário: R$"+item.getValor().doubleValue()/100);
+
+		StringBuilder msg = new StringBuilder();
+
+		for (ItemPedido item : pedido.getItemPedido()) {
+			msg.append(System.lineSeparator() + "- Produto: " + item.getProduto().getNome() + " | Quantidade: "
+					+ item.getQuantidade() + " | Valor Unitário: R$" + item.getValor().doubleValue() / 100);
 		}
-		
-		msg.append(System.lineSeparator()+System.lineSeparator()+"Total da compra: R$"+valorTotalPedido(pedido));
-		
-		
+
+		msg.append(System.lineSeparator() + System.lineSeparator() + "Total da compra: R$" + valorTotalPedido(pedido));
+
 		return msg;
 	}
-	
+
 	// Caso o cliente queira voltar e continuar a adicionar itens ao pedido.
 	public String voltaCarrinhoPedido(long idPedido) throws Exception {
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(idPedido);
 
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		ValidarPedido.executa(pedidoBuscado);
+		
 		if (pedidoBuscado.get().getStatus() == StatusPedido.CARRINHO) {
 			throw new Exception("O carrinho ainda não foi finalizado.");
 		} else {
@@ -148,9 +147,7 @@ public class PedidoService {
 
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
 
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		ValidarPedido.executa(pedidoBuscado);
 
 		if (pedidoBuscado.get().getCliente().getEndereco().equals(null)) {
 			throw new Exception("O cliente não possui endereço cadastrado!");
@@ -176,9 +173,7 @@ public class PedidoService {
 			String logradouro, Integer numero) throws Exception {
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
 
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		ValidarPedido.executa(pedidoBuscado);
 
 		EnderecoEntrega endereco = new EnderecoEntrega();
 		endereco.setEstado(estado);
@@ -199,9 +194,8 @@ public class PedidoService {
 	// Confirma o pagamento e alterada o status do pedido para "ENTREGA"
 	public String confirmaPagamento(Long codigo) throws Exception {
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		
+		ValidarPedido.executa(pedidoBuscado);
 
 		if (!pedidoBuscado.get().getStatus().equals(StatusPedido.ENTREGA)) {
 			pedidoBuscado.get().setStatus(StatusPedido.ENTREGA);
@@ -213,23 +207,22 @@ public class PedidoService {
 		pedidoRepository.save(pedidoBuscado.get());
 
 		EmailDetails details = new EmailDetails();
-		
+
 		details.setSubject("O PAGAMENTO DA SUA COMPRA FOI CONFIRMADO!");
 		details.setMsgBody("O pagamento da sua compra foi confirmado, em breve ele será enviado.");
 		details.setRecipient(pedidoBuscado.get().getCliente().getEmail());
-		
+
 		emailService.sendSimpleMail(details);
-		
+
 		return "Pagamento confirmado!";
 	}
-	
 
 	// Resumo com retorno de mensagem, codigo da compra e valor total.
 	public String resumoPedido(Long codigo) throws Exception {
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		
+		ValidarPedido.executa(pedidoBuscado);
+		
 		BigDecimal total = BigDecimal.ZERO;
 
 		for (ItemPedido itemPedido : pedidoBuscado.get().getItemPedido()) {
@@ -243,7 +236,6 @@ public class PedidoService {
 		return "O valor total é de R$" + total.doubleValue() / 100 + ".";
 	}
 
-	
 	// Calcula o valor total do pedido.
 	public double valorTotalPedido(Pedido pedido) {
 		BigDecimal total = BigDecimal.ZERO;
@@ -256,9 +248,9 @@ public class PedidoService {
 			}
 		}
 
-		return total.doubleValue()/100;
+		return total.doubleValue() / 100;
 	}
-	
+
 	public String confirmaSMSPedido(Long codigo) throws Exception {
 
 		return "SUA COMPRA NA MJV PETSHOP FOI CONFIRMADA!, " + resumoPedido(codigo);
@@ -275,9 +267,8 @@ public class PedidoService {
 		if (!itemPedidoBuscado.isPresent()) {
 			throw new Exception("Não foi possivel localizar o item no pedido.");
 		}
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		
+		ValidarPedido.executa(pedidoBuscado);
 
 		if (pedidoBuscado.get().getStatus() != StatusPedido.CARRINHO) {
 			return "Carrinho fechado, abra novamente para remover os itens";
@@ -292,13 +283,11 @@ public class PedidoService {
 
 	}
 
-	
 	// Retorna todos os itens do pedido.
 	public List<ItemPedido> itensPedido(Long codigo) throws Exception {
 		Optional<Pedido> pedidoBuscado = pedidoRepository.findById(codigo);
-		if (!pedidoBuscado.isPresent()) {
-			throw new Exception("Não foi possivel localizar o pedido.");
-		}
+		
+		ValidarPedido.executa(pedidoBuscado);
 
 		return pedidoBuscado.get().getItemPedido();
 	}

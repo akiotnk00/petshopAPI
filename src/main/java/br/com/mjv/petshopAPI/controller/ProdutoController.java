@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.mjv.petshopAPI.dto.ProdutoDto;
 import br.com.mjv.petshopAPI.entity.Produto;
 import br.com.mjv.petshopAPI.services.ProdutoService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -44,7 +45,7 @@ public class ProdutoController {
 
 	// Busca um produto por ID.
 	@GetMapping("/{codigo}")
-	public List<Produto> buscarProdutosPorCodigo(@PathVariable Long codigo) {
+	public List<ProdutoDto> buscarProdutosPorCodigo(@PathVariable Long codigo) {
 
 		return produtoService.findProdutoByCodigo(codigo);
 	}
