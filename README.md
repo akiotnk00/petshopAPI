@@ -13,3 +13,6 @@ Foi utilizado:
 ![image](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white)
 
 Envio de email e SMS de acordo com status do pedido.
+
+Swagger UI:
+![swagger](https://user-images.githubusercontent.com/54818331/200157672-11da6db1-33f3-440f-bf0e-77ace2c8ce80.png)
