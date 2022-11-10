@@ -1,6 +1,8 @@
 package br.com.mjv.petshopAPI.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import br.com.mjv.petshopAPI.entity.Produto;
 
@@ -12,6 +14,10 @@ public class ProdutoDto {
 	private Integer quantidade;
 	private String imagemurl;
 	
+	public ProdutoDto() {
+		super();
+	}
+
 	public ProdutoDto(Produto produto) {
 		this.codigo = produto.getCodigo();
 		this.nome = produto.getNome();
@@ -69,4 +75,8 @@ public class ProdutoDto {
 		this.imagemurl = imagemurl;
 	}
 
+	public static List<ProdutoDto> converter(List<Produto> produtos){
+		return produtos.stream().map(ProdutoDto::new).collect(Collectors.toList());
+	}
+	
 }

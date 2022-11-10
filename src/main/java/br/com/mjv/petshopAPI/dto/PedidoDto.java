@@ -1,6 +1,8 @@
 package br.com.mjv.petshopAPI.dto;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import br.com.mjv.petshopAPI.entity.Pedido;
 import br.com.mjv.petshopAPI.entity.StatusPedido;
@@ -10,6 +12,11 @@ public class PedidoDto {
 	private LocalDate data;
 	private StatusPedido status;
 	
+	
+	
+	public PedidoDto() {
+		super();
+	}
 	public PedidoDto(Pedido pedido) {
 		this.codigo = pedido.getCodigo();
 		this.data = pedido.getData();
@@ -35,4 +42,7 @@ public class PedidoDto {
 		this.status = status;
 	}
 
+	public static List<PedidoDto> converter(List<Pedido> pedidos){
+		return pedidos.stream().map(PedidoDto::new).collect(Collectors.toList());
+	}
 }

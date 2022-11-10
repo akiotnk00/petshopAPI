@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.mjv.petshopAPI.dto.PedidoDto;
 import br.com.mjv.petshopAPI.entity.EmailDetails;
 import br.com.mjv.petshopAPI.entity.EnderecoEntrega;
 import br.com.mjv.petshopAPI.entity.ItemPedido;
@@ -38,7 +39,7 @@ public class PedidoService {
 	@Autowired
 	private EmailService emailService;
 
-	public Page<Pedido> findPedidos(Pageable pageable) {
+	public Page<PedidoDto> findPedidos(Pageable pageable) {
 		return pedidoRepository.findPedidos(pageable);
 	}
 
@@ -256,7 +257,7 @@ public class PedidoService {
 		return "SUA COMPRA NA MJV PETSHOP FOI CONFIRMADA!, " + resumoPedido(codigo);
 	}
 
-	public Page<Pedido> findPedidosEntrega(Pageable pageable) {
+	public Page<PedidoDto> findPedidosEntrega(Pageable pageable) {
 		return pedidoRepository.findPedidosEntrega(pageable);
 	}
 

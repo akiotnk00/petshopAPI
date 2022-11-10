@@ -19,7 +19,7 @@ public class ProdutoService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
-	public Page<Produto> findProdutos(Pageable pageable) {
+	public Page<ProdutoDto> findProdutos(Pageable pageable) {
 	
 		return produtoRepository.findProdutos(pageable);
 	}
@@ -84,10 +84,17 @@ public class ProdutoService {
 		produtoRepository.save(produtoBuscado.get());
 	}
 	
-	public String cadastrarProduto(Produto produto) throws Exception {
-		if (produto.equals(null)) {
+	public String cadastrarProduto(ProdutoDto produtoDto) throws Exception {
+		if (produtoDto.equals(null)) {
 			throw new Exception("Produto invalida");
 		} else {
+			Produto produto = new Produto();
+			produto.setNome(produtoDto.getNome());
+			produto.setQuantidade(produtoDto.getQuantidade());
+			produto.setDescricao(produtoDto.getDescricao());
+			produto.setValor(produtoDto.getValor());
+			produto.setImagemurl(produtoDto.getImagemurl());
+			
 			produtoRepository.save(produto);
 		}
 		return "Produto cadastrado com sucesso!";

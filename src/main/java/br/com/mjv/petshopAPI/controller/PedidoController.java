@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.mjv.petshopAPI.entity.ItemPedido;
-import br.com.mjv.petshopAPI.entity.Pedido;
+import br.com.mjv.petshopAPI.dto.ItemPedidoDto;
+import br.com.mjv.petshopAPI.dto.PedidoDto;
 import br.com.mjv.petshopAPI.services.PedidoService;
 
 @RestController
@@ -27,7 +27,7 @@ public class PedidoController {
 
 	// Busca todos os pedidos.
 	@GetMapping
-	public Page<Pedido> buscarPedidos(Pageable pageable) {
+	public Page<PedidoDto> buscarPedidos(Pageable pageable) {
 		return pedidoService.findPedidos(pageable);
 	}
 
@@ -91,13 +91,13 @@ public class PedidoController {
 	
 	// Retorna todos os itens do pedido por ID.
 	@GetMapping("/{codigo}/itens")
-	public List<ItemPedido> itensPedido(@PathVariable Long codigo) throws Exception {
-		return pedidoService.itensPedido(codigo);
+	public List<ItemPedidoDto> itensPedido(@PathVariable Long codigo) throws Exception {
+		return ItemPedidoDto.converter(pedidoService.itensPedido(codigo));
 	}
 	
 	// Retorna todos os pedidos com status ENTREGA.
 	@GetMapping("{codigo}/entrega")
-	public Page<Pedido> buscarPedidosEntrega(Pageable pageable) {
+	public Page<PedidoDto> buscarPedidosEntrega(Pageable pageable) {
 		return pedidoService.findPedidosEntrega(pageable);
 	}
 }

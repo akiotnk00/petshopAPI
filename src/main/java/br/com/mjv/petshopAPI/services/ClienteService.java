@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.mjv.petshopAPI.dto.ClienteDto;
 import br.com.mjv.petshopAPI.entity.Cliente;
 import br.com.mjv.petshopAPI.entity.Endereco;
 import br.com.mjv.petshopAPI.entity.Pedido;
@@ -22,14 +23,22 @@ public class ClienteService {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 
-	public Page<Cliente> findClientes(Pageable pageable) {
+	public Page<ClienteDto> findClientes(Pageable pageable) {
 		return clienteRepository.findClientes(pageable);
 	}
 	
-	public String cadastrarCliente(Cliente cliente) {
+	public String cadastrarCliente(ClienteDto clienteDto) {
 		
 		// Toda vez que um cliente for cadastrado um pedido é criado.
 		// E por padrão ele recebe o STATUS de CARRRINHO.
+		Cliente cliente = new Cliente();
+		cliente.setNome(clienteDto.getNome());
+		cliente.setCpf(clienteDto.getCpf());
+		cliente.setEmail(clienteDto.getEmail());
+		cliente.setTelefone(clienteDto.getTelefone());
+		cliente.setDatanascimento(clienteDto.getDatanascimento());
+		
+		
 		Pedido pedido = new Pedido(cliente);	
 		
 		// Salva o novo cliente.

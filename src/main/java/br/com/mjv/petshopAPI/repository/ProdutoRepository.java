@@ -7,12 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import br.com.mjv.petshopAPI.dto.ProdutoDto;
 import br.com.mjv.petshopAPI.entity.Produto;
 
 public interface ProdutoRepository   extends JpaRepository<Produto, Long>{
 
 	@Query("SELECT p FROM Produto p")
-	Page<Produto> findProdutos(Pageable pageable);
+	Page<ProdutoDto> findProdutos(Pageable pageable);
 	
 	List<Produto> findByNome(String nome);
 	

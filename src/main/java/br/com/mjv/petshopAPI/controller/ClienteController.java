@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.mjv.petshopAPI.entity.Cliente;
+import br.com.mjv.petshopAPI.dto.ClienteDto;
 import br.com.mjv.petshopAPI.services.ClienteService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -24,14 +24,14 @@ public class ClienteController {
 
 	// Busca todos os clientes.
 	@GetMapping
-	public Page<Cliente> buscarProdutos(Pageable pageable) {
+	public Page<ClienteDto> buscarProdutos(Pageable pageable) {
 		return clienteService.findClientes(pageable);
 	}
 
 	// Cadastra um novo cliente.
 	@PostMapping
-	public String cadastrarCliente(@RequestBody Cliente cliente) throws Exception {
-		return clienteService.cadastrarCliente(cliente);
+	public String cadastrarCliente(@RequestBody ClienteDto clienteDto) throws Exception {
+		return clienteService.cadastrarCliente(clienteDto);
 	}
 
 	// Deleta um cliente por ID.
