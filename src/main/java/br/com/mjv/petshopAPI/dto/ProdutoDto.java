@@ -11,8 +11,6 @@ public class ProdutoDto {
 	private BigDecimal valor;
 	private Integer quantidade;
 	private String imagemurl;
-
-	
 	
 	public ProdutoDto(Produto produto) {
 		this.codigo = produto.getCodigo();
