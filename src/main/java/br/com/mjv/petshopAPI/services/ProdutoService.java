@@ -1,6 +1,5 @@
 package br.com.mjv.petshopAPI.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,10 +29,8 @@ public class ProdutoService {
 
 	public List<ProdutoDto> findProdutoByCodigo(Long codigo) {
 		List<Produto> produtos = produtoRepository.findByCodigo(codigo);
-		List<ProdutoDto> dtos = new ArrayList<ProdutoDto>();
-		produtos.forEach(p -> dtos.add(new ProdutoDto(p)));
 		
-		return dtos;
+		return ProdutoDto.converter(produtos);
 	}
 
 	public List<Produto> findProdutoByCategoriaNome(String nome) {

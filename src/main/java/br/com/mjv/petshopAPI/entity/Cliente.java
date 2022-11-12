@@ -51,6 +51,16 @@ public class Cliente implements Serializable{
 		this.email = clienteDto.getEmail();
 		this.datanascimento = clienteDto.getDatanascimento();
 	}
+	
+
+	public Cliente(String nome, String cpf, String telefone, String email, LocalDate datanascimento) {
+		this.nome = nome;
+		this.cpf = cpf;
+		this.telefone = telefone;
+		this.email = email;
+		this.datanascimento = datanascimento;
+	}
+
 	public Long getCodigo() {
 		return codigo;
 	}

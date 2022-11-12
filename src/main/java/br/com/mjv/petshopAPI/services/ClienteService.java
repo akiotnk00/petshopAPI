@@ -27,27 +27,15 @@ public class ClienteService {
 		return clienteRepository.findClientes(pageable);
 	}
 	
-	public String cadastrarCliente(ClienteDto clienteDto) {
-		
-		// Toda vez que um cliente for cadastrado um pedido é criado.
-		// E por padrão ele recebe o STATUS de CARRRINHO.
-		Cliente cliente = new Cliente();
-		cliente.setNome(clienteDto.getNome());
-		cliente.setCpf(clienteDto.getCpf());
-		cliente.setEmail(clienteDto.getEmail());
-		cliente.setTelefone(clienteDto.getTelefone());
-		cliente.setDatanascimento(clienteDto.getDatanascimento());
-		
+	public String cadastrarCliente(Cliente cliente) {
+			
 		
 		Pedido pedido = new Pedido(cliente);	
 		
-		// Salva o novo cliente.
 		clienteRepository.save(cliente);
 		
-		// Seta o cliente no pedido.
 		pedido.setCliente(cliente);	
-		
-		// Salva o pedido no banco.
+
 		pedidoRepository.save(pedido);
 		
 		return "Cliente cadastrado com sucesso!";

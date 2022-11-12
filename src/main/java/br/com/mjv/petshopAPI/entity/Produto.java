@@ -41,7 +41,19 @@ public class Produto implements Serializable{
 	
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
 	@JsonBackReference
-	private List<ItemPedido> itens;
+	private List<ItemPedido> itens;	
+
+	public Produto() {
+	}
+
+	public Produto(String nome, String descricao, BigDecimal valor, Integer quantidade, String imagemurl) {
+		super();
+		this.nome = nome;
+		this.descricao = descricao;
+		this.valor = valor;
+		this.quantidade = quantidade;
+		this.imagemurl = imagemurl;
+	}
 
 	public Long getCodigo() {
 		return codigo;

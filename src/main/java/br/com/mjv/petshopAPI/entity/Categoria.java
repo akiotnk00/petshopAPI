@@ -29,6 +29,9 @@ public class Categoria implements Serializable{
 	@JsonBackReference
 	private List<Produto> produtos;
 	
+	public Categoria(String nome) {
+		this.nome = nome;
+	}
 	public Long getCodigo() {
 		return codigo;
 	}
