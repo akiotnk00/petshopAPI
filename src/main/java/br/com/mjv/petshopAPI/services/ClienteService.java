@@ -27,7 +27,7 @@ public class ClienteService {
 		return clienteRepository.findClientes(pageable);
 	}
 	
-	public String cadastrarCliente(Cliente cliente) {
+	public Cliente cadastrarCliente(Cliente cliente) {
 			
 		
 		Pedido pedido = new Pedido(cliente);	
@@ -38,7 +38,7 @@ public class ClienteService {
 
 		pedidoRepository.save(pedido);
 		
-		return "Cliente cadastrado com sucesso!";
+		return cliente;
 	}
 
 	public String cadastrarEndereco(Long codigo, String estado, String cidade, String bairro, String cep,

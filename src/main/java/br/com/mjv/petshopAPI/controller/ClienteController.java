@@ -1,7 +1,5 @@
 package br.com.mjv.petshopAPI.controller;
 
-import java.net.URI;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.mjv.petshopAPI.dto.ClienteDto;
 import br.com.mjv.petshopAPI.form.ClienteForm;
@@ -37,9 +34,10 @@ public class ClienteController {
 
 	// Cadastra um novo cliente.
 	@PostMapping
-	public String cadastrarCliente(@RequestBody @Valid ClienteForm clienteForm, UriComponentsBuilder uriBuilder) throws Exception {
+	public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody ClienteForm clienteForm){
 		
-		return clienteService.cadastrarCliente(clienteForm.converter());
+		return ResponseEntity.ok(new ClienteDto(clienteService.cadastrarCliente(clienteForm.converter())));
+		
 	}
 
 	// Deleta um cliente por ID.

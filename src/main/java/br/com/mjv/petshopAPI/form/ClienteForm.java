@@ -23,7 +23,6 @@ public class ClienteForm {
 	@NotNull @NotEmpty
 	private String email;
 	
-	@NotNull
 	private LocalDate datanascimento;
 
 	public String getNome() {
