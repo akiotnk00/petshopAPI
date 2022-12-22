@@ -13,8 +13,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "categoria")
+@Data
 public class Categoria implements Serializable{
 	/**
 	 * 
@@ -32,23 +35,10 @@ public class Categoria implements Serializable{
 	public Categoria(String nome) {
 		this.nome = nome;
 	}
-	public Long getCodigo() {
-		return codigo;
-	}
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
+
+	public Categoria(long i, String nome) {
+		this.codigo = i;
 		this.nome = nome;
-	}
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
 	}
 	
 	

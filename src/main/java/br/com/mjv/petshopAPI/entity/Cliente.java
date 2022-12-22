@@ -12,8 +12,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import br.com.mjv.petshopAPI.dto.ClienteDto;
-
 @Entity
 @Table(name = "cliente")
 public class Cliente implements Serializable{
@@ -42,16 +40,6 @@ public class Cliente implements Serializable{
 	public Cliente() {
 		
 	}
-	
-	public Cliente(ClienteDto clienteDto) {
-		this.codigo = clienteDto.getCodigo();
-		this.nome = clienteDto.getNome();
-		this.cpf = clienteDto.getCpf();
-		this.telefone = clienteDto.getTelefone();
-		this.email = clienteDto.getEmail();
-		this.datanascimento = clienteDto.getDatanascimento();
-	}
-	
 
 	public Cliente(String nome, String cpf, String telefone, String email, LocalDate datanascimento) {
 		this.nome = nome;

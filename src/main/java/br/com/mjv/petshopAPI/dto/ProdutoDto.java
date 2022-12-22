@@ -27,52 +27,29 @@ public class ProdutoDto {
 		this.imagemurl = produto.getImagemurl();
 	}
 
+
 	public Long getCodigo() {
 		return codigo;
-	}
-
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
 	}
 
 	public String getNome() {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	public String getDescricao() {
 		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 
 	public BigDecimal getValor() {
 		return valor;
 	}
 
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
-	}
-
 	public Integer getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public String getImagemurl() {
 		return imagemurl;
-	}
-
-	public void setImagemurl(String imagemurl) {
-		this.imagemurl = imagemurl;
 	}
 
 	public static List<ProdutoDto> converter(List<Produto> produtos){

@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.com.mjv.petshopAPI.entity.Cliente;
+import lombok.Data;
 
+@Data
 public class ClienteDto {
 	private Long codigo;
 	private String nome;
@@ -17,6 +19,7 @@ public class ClienteDto {
 	public ClienteDto() {
 		super();
 	}
+	
 	public ClienteDto(Cliente cliente) {
         this.codigo = cliente.getCodigo();
 		this.nome = cliente.getNome();
@@ -25,43 +28,6 @@ public class ClienteDto {
 		this.email = cliente.getEmail();
 		this.datanascimento = cliente.getDatanascimento();
 	}
-	public Long getCodigo() {
-		return codigo;
-	}
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	public String getCpf() {
-		return cpf;
-	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-	public String getTelefone() {
-		return telefone;
-	}
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public LocalDate getDatanascimento() {
-		return datanascimento;
-	}
-	public void setDatanascimento(LocalDate datanascimento) {
-		this.datanascimento = datanascimento;
-	}
-	
 	public static List<ClienteDto> converter(List<Cliente> clientes){
 		return clientes.stream().map(ClienteDto::new).collect(Collectors.toList());
 	}

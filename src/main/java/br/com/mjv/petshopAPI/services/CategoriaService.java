@@ -15,12 +15,16 @@ import br.com.mjv.petshopAPI.repository.ProdutoRepository;
 
 @Service
 public class CategoriaService {
-
-	@Autowired
+	
 	private CategoriaRepository categoriaRepository;
 
-	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	public CategoriaService(CategoriaRepository categoriaRepository, ProdutoRepository produtoRepository) {
+		this.categoriaRepository = categoriaRepository;
+		this.produtoRepository = produtoRepository;
+	}
 
 	public Page<Categoria> findCategorias(Pageable pageable) {
 		return categoriaRepository.findCategorias(pageable);
@@ -34,13 +38,10 @@ public class CategoriaService {
 		return categoriaRepository.findByCodigo(codigo);
 	}
 
-	public String deletarCategoria(long codigo) throws Exception {
+	public String deletarCategoria(long codigo) {
 		
 		Optional<Categoria> categoriaBuscada = categoriaRepository.findById(codigo);
 		
-		if(!categoriaBuscada.isPresent()) {
-			throw new Exception("Não foi possivel localizar a categoria.");
-		}
 		categoriaRepository.delete(categoriaBuscada.get());
 		
 		return "Categoria deletada com sucesso!";
